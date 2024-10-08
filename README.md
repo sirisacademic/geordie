@@ -1,4 +1,4 @@
-# geordie 📌
+# geordie 📌🅾️💀
 _Geo or die_ / _Impiccheranno **Geordie** con una corda d'oro_.
 
 A python library for extracting geographic entities and classifying their role.
