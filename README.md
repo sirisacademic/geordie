@@ -1,5 +1,5 @@
 # geordie 📌🅾️💀
-_Geo or die_ / _Impiccheranno **Geordie** con una corda d'oro_.
+_Geo or die_ / _Impiccheranno **Geordie** con una corda d'oro_ / _**G**eographical **E**ntity **O**bject **R**ecognition, **D**etection, **I**dentification and **E**xtraction_
 
 A python library for extracting geographic entities and classifying their role.
 
