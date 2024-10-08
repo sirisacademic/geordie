@@ -3,6 +3,9 @@ import os
 from .ner import GeordieNER # Geo Entity Recognition
 from .disambiguation import EntityLinker # Disambiguation of entities with WikiData or OpenStreetMaps
 from .role_classification import RoleClassifier # Role classification of the Geo entity
+import nltk
+from nltk.tokenize import sent_tokenize
+nltk.download('punkt')
 
 def get_device():
     """
@@ -27,15 +30,41 @@ class Geordie:
 
         # Pass the device to each of the components
         self.ner = GeordieNER(self.device)
-        self.entity_linker = EntityLinker()
+        self.entity_linker = EntityLinker(self.device)
         self.entity_classifier = RoleClassifier(self.device)
+    
+    def get_context_of_the_mention(self,text, entities):
+        results = []
+        if len(entities) > 0:
+            # Split text into sentences
+            sentences = sent_tokenize(text)
+            # to remove the added keywords
+            # sentences = sentences[:-2]
+
+            # Extract sentences containing entities
+            for entity in entities:
+                word = entity['word']
+                start_pos = entity['start']
+
+                # Find the sentence that contains the entity based on its start position
+                for sentence in sentences:
+                    if text.find(sentence) <= start_pos < text.find(sentence) + len(sentence):
+                        results.append({'context':sentence.strip(),'entity': word})
+                        break  # Stop searching after finding the first matching sentence, because in the first mention the paper should express the relation with the place
+        
+        return results
+
 
     def process_text(self, text):
         # Example flow: NER -> Entity Linking -> Entity Classification
         entities = self.ner.extract_entities(text)
-        linked_entities = self.entity_linker.link_entities(entities)
-        classified_entities = self.entity_classifier.classify(linked_entities)
-        return classified_entities
+
+        # Get sentences of the mentions
+        entities_in_sentence = self.get_context_of_the_mention(text, entities)
+        linked_entities = self.entity_linker.link_entities(entities_in_sentence)
+        
+        #classified_entities = self.entity_classifier.classify(linked_entities)
+        return linked_entities#classified_entities
 
 # Load examples for experimentation
 def load_examples():
@@ -48,9 +77,11 @@ def load_examples():
     """
     # Get the path of the current directory where this __init__.py file resides
     base_dir = os.path.dirname(__file__)
+    # Get the path of the parent directory
+    parent_dir = os.path.abspath(os.path.join(base_dir, os.pardir))
     
     # Path to the examples file
-    example_file_path = os.path.join(base_dir, 'examples', 'example.txt')
+    example_file_path = os.path.join(parent_dir, 'examples', 'example.txt')
 
     # Ensure the file exists before trying to read it
     if not os.path.exists(example_file_path):

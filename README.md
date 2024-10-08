@@ -20,23 +20,25 @@ pip install -r requirements.txt
 ## Usage
 
 ```python
-import geordie
+import geordie 
 
-# Example texts
-texts = [
-    "I visited Paris last summer.",
-    "Mount Everest is the tallest mountain in the world."
-]
+# Call load_examples
+examples = geordie.load_examples()
 
-# Process the texts
-results = geordie.process_texts(texts)
+# Get first example of the list
+example = examples[0]
 
-for text_result in results:
-    for entity_info in text_result:
-        print(f"Entity: {entity_info['entity']}")
-        print(f"Wikidata Info: {entity_info['wikidata_info']}")
-        print(f"Classification: {entity_info['classification']}")
-        print(f"Sentence: {entity_info['sentence']}\n")
+# Create instance of Geordie
+my_geordie = geordie.Geordie()
+
+# Test with an example
+results = my_geordie.process_text(example)
+
+for result in results:
+    print(f"Entity: {entity_info['entity']}")
+    print(f"OSM Info: {entity_info['osm']}")
+    # print(f"Classification: {entity_info['osm']}")
+    print(f"Sentence: {entity_info['context']}\n")
 ```
 
 ## Requirements

@@ -1,4 +1,4 @@
-from transformers import pipeline, AutoModelForSequenceClassification, AutoTokenizer
+from transformers import pipeline, AutoModelForTokenClassification, AutoTokenizer
 
 class GeordieNER:
     def __init__(self, device):
@@ -10,12 +10,12 @@ class GeordieNER:
         # device_num = 0 if device == 'cuda' else -1
 
         # Load the model and tokenizer
-        model = AutoModelForSequenceClassification.from_pretrained("SIRIS-Lab/geordie-ner")
-        tokenizer = AutoTokenizer.from_pretrained("SIRIS-Lab/geordie-ner")
+        self.model = AutoModelForTokenClassification.from_pretrained("SIRIS-Lab/geordie-ner")
+        self.tokenizer = AutoTokenizer.from_pretrained("SIRIS-Lab/geordie-ner")
 
         # Initialize the NER pipeline with aggregation strategy 'simple'
-        self.ner_pipeline = pipeline(model=model, 
-                                     tokenizer=tokenizer,
+        self.ner_pipeline = pipeline(model=self.model, 
+                                     tokenizer=self.tokenizer,
                                      task="ner",
                                      aggregation_strategy="simple",  # Aggregates overlapping token spans into a single entity
                                      device=device  # Set device: -1 for CPU, or 0 (or other index) for CUDA
