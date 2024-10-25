@@ -35,10 +35,10 @@ my_geordie = geordie.Geordie()
 results = my_geordie.process_text(example)
 
 for result in results:
-    print(f"Entity: {entity_info['entity']}")
-    print(f"OSM Info: {entity_info['osm']}")
+    print(f"Entity: {result['entity']}")
+    print(f"OSM Info: {result['osm']}")
     # print(f"Classification: {entity_info['osm']}")
-    print(f"Sentence: {entity_info['context']}\n")
+    print(f"Sentence: {result['context']}\n")
 ```
 
 ## Module description

@@ -1,4 +1,5 @@
 from geopy.geocoders import Nominatim
+import pandas as pd
 import time
 
 class EntityLinker:
@@ -11,7 +12,10 @@ class EntityLinker:
         for item in entities_in_sentence:
             entity = item['entity']
             res = self.app.geocode(entity, addressdetails=True, language ="en", extratags=True)
-            item['osm'] = res.raw
+            if not(pd.isnull(res)):
+                item['osm'] = res.raw
+            else:
+                item['osm'] = None
             result.append(item)
             time.sleep(5)
         return result
