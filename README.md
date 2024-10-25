@@ -7,6 +7,7 @@ A python library for extracting geographic entities and classifying their role.
 
 - Named Entity Recognition (NER) to identify geographic entities (category: `GEO`).
 - Integration with the OpenStreetMaps to retrieve information about recognized entities.
+    - Including demonym, country code, and adjective, normalisation into country name.
 - Fine-tuned DistilBERT-based classification model to predict the type of mention for the entity.
 
 ## Installation
@@ -34,11 +35,13 @@ my_geordie = geordie.Geordie()
 # Test with an example
 results = my_geordie.process_text(example)
 
-for result in results:
-    print(f"Entity: {result['entity']}")
-    print(f"OSM Info: {result['osm']}")
-    # print(f"Classification: {entity_info['osm']}")
-    print(f"Sentence: {result['context']}\n")
+example = examples[0]
+result = my_geordie.process_text(example)
+for item in result:
+    print(item['context'])
+    print(f"--> Entity: {item['osm']['name']} | Type: {list(item['osm']['address'].keys())[0]} | Place: {item['osm']['address']['county']}")
+    print(f"--> Type of mention to the geo entity: {item['role'][0]['label']}")
+    print('\n')
 ```
 
 ## Module description
@@ -63,6 +66,15 @@ We evaluate the fine-tuned model on test sets from each dataset.
 | Metric              | Precision | Recall   | F1 Score | Number      |
 |---------------------|-----------|----------|----------|-------------|
 | **GEO Entity**             | 0.902467  | 0.906956 | 0.904706 | 24,526      |
+
+### Entity normalisation with OpenStreetMaps
+
+Demonyms, adjetives, and country codes, are transformed into the country name, to improve performance in OpenStreetMaps search.
+We evaluate the search on a collection of 170 mentions identified in Catalan, and we obtain an **accuracy of 0.82**.
+
+## Identification of the role of the geographic entity
+
+Lorem ipsum.
 
 ## Requirements
 - `transformers`
