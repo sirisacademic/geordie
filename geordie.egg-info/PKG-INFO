@@ -1,0 +1,9 @@
+Metadata-Version: 2.1
+Name: geordie
+Version: 0.1
+Summary: A python library for extracting geographic entities and classifying their role.
+Home-page: https://github.com/sirisacademic/geordie
+Author: SIRIS Academic
+Author-email: nicolau.duransilva@example.com
+Requires-Python: >=3.6
+License-File: LICENSE

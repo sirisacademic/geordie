@@ -69,3 +69,6 @@ Thumbs.db
 *.csv
 *.json
 *.pkl
+*.ipynb
+
+geordie.egg-info/
