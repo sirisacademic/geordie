@@ -1,5 +1,4 @@
 from geopy.geocoders import Nominatim
-import pandas as pd
 import time
 
 keys_to_extract = ['place_id', 'lat', 'lon', 'name', 'address','extratags']
