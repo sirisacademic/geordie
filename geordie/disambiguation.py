@@ -11,7 +11,7 @@ class EntityLinker:
     def link_entities(self, entities_in_sentence):
         result = []
         for item in entities_in_sentence:
-            entity = item['entity']
+            entity = item['entity_normalised']
             try:
                 res = self.app.geocode(entity, addressdetails=True, language ="en", extratags=True)
 

@@ -64,5 +64,3 @@ Thumbs.db
 
 # Local settings for Flake8
 .flake8
-
-geordie.egg-info/

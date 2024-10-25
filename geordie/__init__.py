@@ -1,11 +1,15 @@
 import torch
 import os
+import re
 from .ner import GeordieNER # Geo Entity Recognition
 from .disambiguation import EntityLinker # Disambiguation of entities with WikiData or OpenStreetMaps
 from .role_classification import RoleClassifier # Role classification of the Geo entity
+from .resources.demonyms_and_adjectives import pattern, base_transformed_dict
 import nltk
 from nltk.tokenize import sent_tokenize
 nltk.download('punkt')
+
+
 
 def get_device():
     """
@@ -32,6 +36,18 @@ class Geordie:
         self.ner = GeordieNER(self.device)
         self.entity_linker = EntityLinker(self.device)
         self.entity_classifier = RoleClassifier(self.device)
+
+    def normalise_geographical_entity(self, entity):
+        
+        # Use re.sub to replace matches with full names (exact adjectives)
+        entity = re.sub(
+            pattern,
+            lambda match: base_transformed_dict.get(match.group(0), match.group(0)),
+            entity,
+            flags=re.IGNORECASE
+        )
+
+        return entity
     
     def get_context_of_the_mention(self,text, entities):
         results = []
@@ -49,9 +65,11 @@ class Geordie:
                 # Find the sentence that contains the entity based on its start position
                 for sentence in sentences:
                     if text.find(sentence) <= start_pos < text.find(sentence) + len(sentence):
-                        sentence_marked = sentence.replace(word,f'<BGEO>{word}<EGEO>')
-                        results.append({'context':sentence_marked.strip(),'entity': word})
-                        break  # Stop searching after finding the first matching sentence, because in the first mention the paper should express the relation with the place
+                        if word.startswith('##') == False:
+                            sentence_marked = sentence.replace(word,f'<BGEO>{word}<EGEO>')
+                            word_normalised = self.normalise_geographical_entity(word)
+                            results.append({'context':sentence_marked.strip(),'entity': word, 'entity_normalised':word_normalised})
+                            break  # Stop searching after finding the first matching sentence, because in the first mention the paper should express the relation with the place
         
         return results
 
