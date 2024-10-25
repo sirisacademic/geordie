@@ -71,4 +71,6 @@ Thumbs.db
 *.pkl
 *.ipynb
 
+notebooks/
+
 geordie.egg-info/
