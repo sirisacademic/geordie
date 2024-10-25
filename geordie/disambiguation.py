@@ -1,6 +1,8 @@
 from geopy.geocoders import Nominatim
 import time
 
+keys_to_extract = ['place_id', 'lat', 'lon', 'name', 'address','extratags']
+
 class EntityLinker:
     def __init__(self, device):
         device=device
@@ -10,8 +12,15 @@ class EntityLinker:
         result = []
         for item in entities_in_sentence:
             entity = item['entity']
-            res = self.app.geocode(entity, addressdetails=True, language ="en", extratags=True)
-            item['osm'] = res.raw
+            try:
+                res = self.app.geocode(entity, addressdetails=True, language ="en", extratags=True)
+
+                # Extracting subset of keys with fallback for missing keys
+                subset = {key: res.raw.get(key, None) for key in keys_to_extract}
+
+                item['osm'] = subset
+            except:
+                item['osm'] = None
             result.append(item)
             time.sleep(5)
         return result

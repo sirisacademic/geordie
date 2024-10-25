@@ -49,7 +49,8 @@ class Geordie:
                 # Find the sentence that contains the entity based on its start position
                 for sentence in sentences:
                     if text.find(sentence) <= start_pos < text.find(sentence) + len(sentence):
-                        results.append({'context':sentence.strip(),'entity': word})
+                        sentence_marked = sentence.replace(word,f'<BGEO>{word}<EGEO>')
+                        results.append({'context':sentence_marked.strip(),'entity': word})
                         break  # Stop searching after finding the first matching sentence, because in the first mention the paper should express the relation with the place
         
         return results
@@ -63,8 +64,11 @@ class Geordie:
         entities_in_sentence = self.get_context_of_the_mention(text, entities)
         linked_entities = self.entity_linker.link_entities(entities_in_sentence)
         
+        # Classify context
+        classify_context = self.entity_classifier.classify_role(linked_entities)
+        
         #classified_entities = self.entity_classifier.classify(linked_entities)
-        return linked_entities#classified_entities
+        return classify_context#classified_entities
 
 # Load examples for experimentation
 def load_examples():
