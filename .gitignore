@@ -71,6 +71,7 @@ Thumbs.db
 *.pkl
 *.ipynb
 
+!geordie/data/static_cache.pkl
 notebooks/
 
 geordie.egg-info/
