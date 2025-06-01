@@ -64,3 +64,14 @@ Thumbs.db
 
 # Local settings for Flake8
 .flake8
+
+# Analytics
+*.csv
+*.json
+*.pkl
+*.ipynb
+
+!geordie/data/static_cache.pkl
+notebooks/
+
+geordie.egg-info/
