@@ -10,7 +10,6 @@ from nltk.tokenize import sent_tokenize
 nltk.download('punkt')
 
 
-
 def get_device():
     """
     Automatically detects whether CUDA is available. If not, defaults to CPU.
@@ -66,7 +65,7 @@ class Geordie:
                 for sentence in sentences:
                     if text.find(sentence) <= start_pos < text.find(sentence) + len(sentence):
                         if word.startswith('##') == False:
-                            sentence_marked = sentence.replace(word,f'<START>{word}<END>')
+                            sentence_marked = sentence.replace(word,f'[START_ENT] {word} [END_ENT]')
                             word_normalised = self.normalise_geographical_entity(word)
                             results.append({'context':sentence_marked.strip(),'entity': word, 'entity_normalised':word_normalised})
                             break  # Stop searching after finding the first matching sentence, because in the first mention the paper should express the relation with the place

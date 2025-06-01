@@ -5,5 +5,10 @@ Summary: A python library for extracting geographic entities and classifying the
 Home-page: https://github.com/sirisacademic/geordie
 Author: SIRIS Academic
 Author-email: nicolau.duransilva@example.com
+License: UNKNOWN
+Platform: UNKNOWN
 Requires-Python: >=3.6
 License-File: LICENSE
+
+UNKNOWN
+
