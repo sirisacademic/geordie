@@ -2,10 +2,14 @@ import os
 import pickle
 import pandas as pd
 
+
+script_dir = os.path.dirname(os.path.abspath(__file__))
+relative_path_tmp_cache = os.path.join(script_dir, 'data', 'tmp_cache.pkl')
+
 def cache_new_results(new_results):
 
     # Checking if tmp_cache already exists, in which case we just update it.
-    fpath = 'geordie/data/tmp_cache.pkl'
+    fpath = relative_path_tmp_cache
     if os.path.isfile(fpath):
         tmp_cache=pd.read_pickle(fpath)
         tmp_cache.update(new_results)

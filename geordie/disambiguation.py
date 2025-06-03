@@ -8,6 +8,10 @@ keys_to_extract = ['place_id', 'lat', 'lon', 'name']
 address_keys_to_extract = ["municipality", "city", "town", "village", "county", "state", "province", "state_district", "country"]
 extratags_keys_to_extract = ["wikidata", "wikipedia"] 
 
+script_dir = os.path.dirname(os.path.abspath(__file__))
+relative_path_static_cache = os.path.join(script_dir, 'data', 'static_cache.pkl')
+relative_path_tmp_cache = os.path.join(script_dir, 'data', 'tmp_cache.pkl')
+
 class EntityLinker:
     def __init__(self, device):
         device=device
@@ -16,9 +20,9 @@ class EntityLinker:
     def link_entities(self, entities_in_sentence):
         result = []
         new_results = {}
-        static_cache = pd.read_pickle("geordie/data/static_cache.pkl")
-        if os.path.isfile('geordie/data/tmp_cache.pkl'):
-            tmp_cache = pd.read_pickle("geordie/data/tmp_cache.pkl")
+        static_cache = pd.read_pickle(relative_path_static_cache)
+        if os.path.isfile(relative_path_tmp_cache):
+            tmp_cache = pd.read_pickle(relative_path_tmp_cache)
         else:
             tmp_cache= {}
 

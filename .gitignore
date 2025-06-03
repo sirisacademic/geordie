@@ -70,6 +70,7 @@ Thumbs.db
 *.json
 *.pkl
 *.ipynb
+*.parquet
 
 !geordie/data/static_cache.pkl
 notebooks/
