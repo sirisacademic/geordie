@@ -5,6 +5,7 @@ geordie/__init__.py
 geordie/disambiguation.py
 geordie/ner.py
 geordie/role_classification.py
+geordie/utils.py
 geordie.egg-info/PKG-INFO
 geordie.egg-info/SOURCES.txt
 geordie.egg-info/dependency_links.txt
