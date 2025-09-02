@@ -2,15 +2,14 @@ from setuptools import setup, find_packages
 
 setup(
     name="geordie",
-    version="0.1",
-    packages=find_packages(),
+    version="0.1.0",
+    description="Geographical entity recognition, linking and role classification",
+    long_description="",
+    python_requires=">=3.9",
+    packages=find_packages(include=["geordie", "geordie.*"]),  # flat layout
+    include_package_data=True,  # use MANIFEST.in for non-.py files
     install_requires=[
-        "torch==2.1.1",
-        "transformers==4.41.2"
+        "nltk",
+        "geopy",
     ],
-    description="A python library for extracting geographic entities and classifying their role.",
-    author="SIRIS Academic",
-    author_email="nicolau.duransilva@example.com",
-    url="https://github.com/sirisacademic/geordie",
-    python_requires='>=3.6',
 )
