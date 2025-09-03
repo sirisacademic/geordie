@@ -17,8 +17,6 @@ class GeordieNER:
         self.ner_pipeline = pipeline(model=self.model, 
                                      tokenizer=self.tokenizer,
                                      task="ner",
-                                     truncation=True,             # <-- important
-                                     max_length=512,
                                      aggregation_strategy="simple",  # Aggregates overlapping token spans into a single entity
                                      device=device  # Set device: -1 for CPU, or 0 (or other index) for CUDA
                                      )
@@ -29,7 +27,7 @@ class GeordieNER:
         :param text: The text to process.
         :return: A list of recognized entities with aggregation.
         """
-        return self.ner_pipeline(text)
+        return self.ner_pipeline(text, truncation=True, max_length=512)
 
     def extract_entities_from_corpus(self, texts):
         """

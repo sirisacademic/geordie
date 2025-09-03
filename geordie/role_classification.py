@@ -17,8 +17,7 @@ class RoleClassifier:
         self.role_pipeline = pipeline(model=self.model, 
                                      tokenizer=self.tokenizer,
                                      task="text-classification",
-                                     truncation=True,             
-                                     max_length=512,
+
                                      device=device  # Set device: -1 for CPU, or 0 (or other index) for CUDA
                                      )
 
@@ -31,7 +30,7 @@ class RoleClassifier:
         results = []
         for item in entities_in_sentence:
             text = item['context']
-            role_type = self.role_pipeline(text)
+            role_type = self.role_pipeline(text, truncation=True, max_length=512)
             item['role'] = role_type
             results.append(item)
 
