@@ -17,6 +17,8 @@ class RoleClassifier:
         self.role_pipeline = pipeline(model=self.model, 
                                      tokenizer=self.tokenizer,
                                      task="text-classification",
+                                     truncation=True,             
+                                     max_length=512,
                                      device=device  # Set device: -1 for CPU, or 0 (or other index) for CUDA
                                      )
 
