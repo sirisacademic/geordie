@@ -12,6 +12,7 @@ class GeordieNER:
         # Load the model and tokenizer
         self.model = AutoModelForTokenClassification.from_pretrained("SIRIS-Lab/geordie-ner")
         self.tokenizer = AutoTokenizer.from_pretrained("SIRIS-Lab/geordie-ner")
+        self.tokenizer.model_max_length = 512
 
         # Initialize the NER pipeline with aggregation strategy 'simple'
         self.ner_pipeline = pipeline(model=self.model, 
@@ -27,7 +28,7 @@ class GeordieNER:
         :param text: The text to process.
         :return: A list of recognized entities with aggregation.
         """
-        return self.ner_pipeline(text, truncation=True, max_length=512)
+        return self.ner_pipeline(text)
 
     def extract_entities_from_corpus(self, texts):
         """

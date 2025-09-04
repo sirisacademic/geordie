@@ -12,6 +12,7 @@ class RoleClassifier:
         # Load the model and tokenizer
         self.model = AutoModelForSequenceClassification.from_pretrained("SIRIS-Lab/geordie-role")
         self.tokenizer = AutoTokenizer.from_pretrained("SIRIS-Lab/geordie-role")
+        self.tokenizer.model_max_length = 512 #the important part
 
         # Initialize the NER pipeline with aggregation strategy 'simple'
         self.role_pipeline = pipeline(model=self.model, 
@@ -30,7 +31,7 @@ class RoleClassifier:
         results = []
         for item in entities_in_sentence:
             text = item['context']
-            role_type = self.role_pipeline(text, truncation=True, max_length=512)
+            role_type = self.role_pipeline(text)
             item['role'] = role_type
             results.append(item)
 

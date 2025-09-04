@@ -33,7 +33,7 @@ class EntityLinker:
         language: str = "en",
         addressdetails: bool = True,
         extratags: bool = True,
-        sleep_between_calls: float = 0.0
+        sleep_between_calls: float = 3
     ):
         self.device = device
         self.app = Nominatim(user_agent=user_agent)
