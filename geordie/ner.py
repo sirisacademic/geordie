@@ -1,39 +1,53 @@
-from transformers import pipeline, AutoModelForTokenClassification, AutoTokenizer
+"""Named Entity Recognition for geographic entities."""
+
+from __future__ import annotations
+
+import logging
+
+from transformers import AutoModelForTokenClassification, AutoTokenizer, pipeline
+
+logger = logging.getLogger(__name__)
+
+DEFAULT_MODEL = "SIRIS-Lab/geordie-ner"
+
 
 class GeordieNER:
-    def __init__(self, device):
-        """
-        Initialize the NER component using Hugging Face's transformers pipeline.
-        :param device: 'cpu' or 'cuda' to specify the computation device.
-        """
-        # Set device number: -1 for CPU, or the CUDA device index (typically 0)
-        # device_num = 0 if device == 'cuda' else -1
+    """
+    NER component using a fine-tuned DistilBERT model for geographic entity recognition.
 
-        # Load the model and tokenizer
-        self.model = AutoModelForTokenClassification.from_pretrained("SIRIS-Lab/geordie-ner")
-        self.tokenizer = AutoTokenizer.from_pretrained("SIRIS-Lab/geordie-ner")
-        self.tokenizer.model_max_length = 512
+    Parameters
+    ----------
+    model_name : str
+        HuggingFace model identifier or local path.
+    device : str
+        Computation device (``"cpu"``, ``"cuda"``, ``"cuda:0"``, etc.).
+    max_length : int
+        Maximum token length for the tokenizer.
+    """
 
-        # Initialize the NER pipeline with aggregation strategy 'simple'
-        self.ner_pipeline = pipeline(model=self.model, 
-                                     tokenizer=self.tokenizer,
-                                     task="ner",
-                                     aggregation_strategy="simple",  # Aggregates overlapping token spans into a single entity
-                                     device=device  # Set device: -1 for CPU, or 0 (or other index) for CUDA
-                                     )
+    def __init__(
+        self,
+        device: str = "cpu",
+        model_name: str = DEFAULT_MODEL,
+        max_length: int = 512,
+    ):
+        logger.info("Loading NER model: %s on %s", model_name, device)
+        self.model = AutoModelForTokenClassification.from_pretrained(model_name)
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+        self.tokenizer.model_max_length = max_length
 
-    def extract_entities(self, text):
-        """
-        Perform NER on a single text.
-        :param text: The text to process.
-        :return: A list of recognized entities with aggregation.
-        """
-        return self.ner_pipeline(text)
+        self.pipeline = pipeline(
+            task="ner",
+            model=self.model,
+            tokenizer=self.tokenizer,
+            aggregation_strategy="simple",
+            device=device,
+        )
 
-    def extract_entities_from_corpus(self, texts):
-        """
-        Perform NER on a corpus of texts.
-        :param texts: A list of texts to process.
-        :return: A list of lists, where each inner list contains entities for each text.
-        """
-        return self.ner_pipeline(texts)
+    def extract_entities(self, text: str) -> list[dict]:
+        """Extract geographic entities from a single text."""
+        return self.pipeline(text)
+
+    def extract_entities_batch(self, texts: list[str]) -> list[list[dict]]:
+        """Extract geographic entities from a batch of texts."""
+        return self.pipeline(texts)
